@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新闻选项卡</title>
+    <script src="ajax.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        #box{
+            width: 400px;
+            height: 500px;
+            background: red;
+            margin: 100px auto;
+            overflow: hidden;
+        }
+        #list{
+            height: 50px;
+        }
+        #list li{
+            float: left;
+            width: 98px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            background: pink;
+            border: 1px solid black;
+        }
+        #content div{
+            width: 400px;
+            height: 450px;
+            background: red;
+            border-bottom: 1px solid black;
+            text-align: center;
+        }
+        .on{
+            font-size: 20px;
+            font-weight: bold;
+        }
+        #content div p{
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div id="box">
+    <ul id="list">
+        <li class="on">社会</li>
+        <li>体育</li>
+        <li>娱乐</li>
+        <li>网红</li>
+    </ul>
+    <div id="content">
+        <!--<div>-->
+            <!--<p>渲染</p>-->
+        <!--</div>-->
+    </div>
+</div>
+
+
+<script>
+    var content = document.getElementById("content");
+    var content_div = content.getElementsByTagName("div");
+    var list_lis = document.getElementById("list").getElementsByTagName("li");
+    ajax({
+        type : "get",
+        url : "新闻选项卡.json",
+        data : {},
+        success : function(data){
+            var dataObj = JSON.parse(data);
+            var html = "";
+            for(var k in dataObj){
+                html += "<div>";
+                for(var i in dataObj[k]){
+                    html += "<p>"+dataObj[k][i].title+"</p>";
+                }
+                html += "</div>";
+            }
+            content.innerHTML = html;
+        }
+    })
+
+
+    /*面向过程*/
+      for(var i = 0; i<list_lis.length; i++){
+          list_lis[i].index = i;
+          list_lis[i].onclick = function(){
+              for(var j = 0; j<content_div.length; j++){
+                  content_div[j].style.display = "none";
+                  list_lis[j].className = "";
+              }
+              content_div[this.index].style.display = "block";
+              list_lis[this.index].className = "on";
+          }
+      }
+
+
+    /*传统面向对象*/
+//        function change(btn,div){
+//            this.btn = btn;
+//            this.div = div;
+//            this.tab();
+//        }
+//
+//        change.prototype.tab = function(){
+//            var self = this;
+//            for(var i = 0; i<this.btn.length; i++){
+//                this.btn[i].index = i;
+//                this.btn[i].onclick = function(){
+//                    self.content(this.index);
+//                }
+//            }
+//        }
+//
+//        change.prototype.content = function(curIndex){
+//            for(var i = 0; i<this.div.length; i++){
+//                this.btn[i].className = "";
+//                this.div[i].style.display = "none";
+//            }
+//            this.btn[curIndex].className = "on";
+//            this.div[curIndex].style.display = "block";
+//        }
+//
+//        new change(list_lis,content_div);
+
+    /*es6面向对象*/
+//    class Change{
+//        constructor(btn,div){
+//            this.btn = btn;
+//            this.div = div;
+//            this.tab();
+//        }
+//        tab(){
+//            var self = this;
+//            for(var i = 0; i<this.btn.length; i++){
+//                this.btn[i].index = i;
+//                this.btn[i].onclick = function(){
+//                    self.content(this.index);
+//                }
+//            }
+//        }
+//        content(curIndex){
+//            for(var i =0; i<this.div.length; i++){
+//                this.btn[i]. className = "";
+//                this.div[i].style.display = "none";
+//            }
+//            this.btn[curIndex].className = "on";
+//            this.div[curIndex].style.display = "block";
+//        }
+//    }
+//
+//    new Change(list_lis,content_div);
+
+
+</script>
+</body>
+</html>
